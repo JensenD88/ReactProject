@@ -41,6 +41,35 @@ app.get("/api",(req,res)=>{
   res.status(200).send('server working on port 3500');
 })
 
+app.post("/api/login", (req,res)=>{
+
+  const user = new User({
+		username: req.body.username,
+		password: req.body.password
+	})
+	
+	const Data = JSON.stringify(user.username);
+
+	req.login(user, function(err){
+		if(err){
+			console.log("login error");
+		} else {
+			
+			passport.authenticate("local", { failureRedirect: '/login' })(req, res, function(){
+				User.findOne({username : user.username}).then((doc)=>{
+					console.log("sucessfully logged in")
+					console.log(doc);
+					res.json('sucess');
+          
+          
+				})
+				
+		})
+			}
+	})
+
+})
+
 app.post("/api/register", (req,res)=>{
  console.log(req.body.password)
 //  res.json({"message ": "Form submitted"});
