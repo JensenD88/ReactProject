@@ -57,33 +57,70 @@ app.post("/api/login", (req, res) => {
 		password: req.body.password
 	})
 	//const Data = JSON.stringify(user.username);
+
+	User.findOne({ username: user.username }).then((doc) =>{
+	if(doc == null){console.log(doc)
+	res.json({'message': "No User Found"})}
+	});
+
+	
 	req.login(user, function (err) {
 		if (err) {
-			console.log("login error", err);
+			console.log("login error:", err);
 		} else {
-			passport.authenticate("local", { failureRedirect: '/login' })(req, res, function () {
-				if(user.username === 'Admin'){
-					User.findOne({ username: user.username }).then((doc) => {
+
+			passport.authenticate("local")(req, res, function () {
+				User.findOne({ username: user.username }).then((doc) =>{
+					if(user.username === 'Admin'){
 						console.log("sucessfully logged the Admin in")
-						console.log(doc);
-						res.json({'message' : 'adminAcess',
-						'username': user.username
-					});
-					})	
-				}else{
-				User.findOne({ username: user.username }).then((doc) => {
-					console.log("sucessfully logged in")
-					console.log(doc);
-					res.json({'message' : 'sucess',
-					'username': user.username
-				});
-				})	
-				}
+				 		console.log(doc);
+				 		res.json({'message' : 'adminAcess',
+				 		'username': user.username
+				 	});
+					 }else if(doc == null){
+					  	console.log(doc)
+					    res.json({'message': "No User Found"})
+					}else{
+						console.log("sucessfully logged in")
+						 	console.log(doc);
+						 	res.json({'message' : 'sucess',
+						 	        'username': user.username
+						              });	
+					}
+
+				})
+				// if(user.username === 'Admin'){
+				// 	User.findOne({ username: user.username }).then((doc) => {
+				// 		console.log("sucessfully logged the Admin in")
+				// 		console.log(doc);
+				// 		res.json({'message' : 'adminAcess',
+				// 		'username': user.username
+				// 	});
+				// 	})	
+				// }else{
+				// User.find({ username: user.username }).then((doc) => {
+				// 	if(doc === null){
+				// 		console.log(doc)
+				// 		res.json({'message': "No User Found"})
+
+				// 	}else{
+
+				// 	console.log("sucessfully logged in")
+				// 	console.log(doc);
+				// 	res.json({'message' : 'sucess',
+				// 	        'username': user.username
+				//              });	
+
+				// 	}
+	
+				// })	
+				// }
 				
 			})
 		}
-	})
-})
+	})}
+	
+)
 
 app.post("/api/register", (req,res)=>{
  console.log(req.body.password)
@@ -118,11 +155,8 @@ app.post("/books", function(req,res){
 	      price: req.body.price,
 	      quantity: req.body.quantity,
 	  })
-
-	console.log(newbook)
-	  
+	console.log(newbook)  
 	newbook.save();
-
 	  
 })
 
