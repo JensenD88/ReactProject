@@ -84,37 +84,11 @@ app.post("/api/login", (req, res) => {
 						console.log("sucessfully logged in")
 						 	console.log(doc);
 						 	res.json({'message' : 'sucess',
-						 	        'username': user.username
+						 	           'username': user.username
 						              });	
 					}
 
 				})
-				// if(user.username === 'Admin'){
-				// 	User.findOne({ username: user.username }).then((doc) => {
-				// 		console.log("sucessfully logged the Admin in")
-				// 		console.log(doc);
-				// 		res.json({'message' : 'adminAcess',
-				// 		'username': user.username
-				// 	});
-				// 	})	
-				// }else{
-				// User.find({ username: user.username }).then((doc) => {
-				// 	if(doc === null){
-				// 		console.log(doc)
-				// 		res.json({'message': "No User Found"})
-
-				// 	}else{
-
-				// 	console.log("sucessfully logged in")
-				// 	console.log(doc);
-				// 	res.json({'message' : 'sucess',
-				// 	        'username': user.username
-				//              });	
-
-				// 	}
-	
-				// })	
-				// }
 				
 			})
 		}
@@ -145,6 +119,28 @@ User.register(newUser, req.body.password , function(err){
 });
 })
 
+app.get("/DisplayBook", (req,res)=>{
+	book.find().then(bk => {
+		const bookName = bk.map(bk => bk.name);
+		const bkname = JSON.stringify(bookName);
+		console.log(typeof bookName);
+		res.json(bookName); // Assuming you want to respond with an array of book names
+	}).catch(err => {
+		console.error(err);
+		res.status(500).json({ error: 'Internal Server Error' });
+	});
+})
+
+app.get("/BookData", (req,res) => {
+	book.find().then(bk =>{
+		const Bdata = JSON.stringify(bk);
+		console.log(Bdata);
+		res.json(bk)
+	}).catch(errerr => {
+		console.error(err);
+		res.status(500).json({ error: 'Internal Server Error' });
+	});
+})
 //RESTfull APi for book data manupilation
 
 app.post("/books", function(req,res){
@@ -155,6 +151,7 @@ app.post("/books", function(req,res){
 	      price: req.body.price,
 	      quantity: req.body.quantity,
 	  })
+	  
 	console.log(newbook)  
 	newbook.save();
 	  
