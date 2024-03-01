@@ -120,7 +120,7 @@ User.register(newUser, req.body.password , function(err){
 })
 
 app.get("/DisplayBook", (req,res)=>{
-	book.find().then(bk => {
+	book.find().then(bk => { //naming convention changes
 		const bookName = bk.map(bk => bk.name);
 		const bkname = JSON.stringify(bookName);
 		console.log(typeof bookName);
@@ -132,7 +132,7 @@ app.get("/DisplayBook", (req,res)=>{
 })
 
 app.get("/BookData", (req,res) => {
-	book.find().then(bk =>{
+	book.find().then(bk =>{ //naming 
 		const Bdata = JSON.stringify(bk);
 		console.log(Bdata);
 		res.json(bk)
