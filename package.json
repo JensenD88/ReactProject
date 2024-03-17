@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "@material-ui/core": "^4.12.4",
+    "express-session": "^1.18.0",
     "react-alert": "^7.0.3",
-    "react-query": "^3.39.3"
+    "react-query": "^3.39.3",
+    "redis": "^4.6.13"
   }
 }
